@@ -1,6 +1,10 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
+from config.db import Base, engine
+
+Base.metadata.create_all(bind=engine)
+
 app = FastAPI()
 
 
