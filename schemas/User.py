@@ -1,7 +1,7 @@
 from pydantic import BaseModel, ConfigDict, EmailStr
 from typing import List, Optional
 
-from schemas.Role import RoleCreate
+from schemas.Role import RoleCreate, Role
 
 
 class UserBase(BaseModel):
@@ -22,5 +22,6 @@ class UserUpdate(BaseModel):
 
 class User(UserBase):
     id: int
+    roles: List[Role]
 
     model_config = ConfigDict(from_attributes=True)

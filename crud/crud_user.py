@@ -5,16 +5,16 @@ from sqlalchemy.orm import Session, joinedload
 from crud.base import CRUDBase
 from models.Role import Role
 from models.User import User
-from schemas.User import UserCreate, UserUpdate
+from schemas.User import UserCreate, UserUpdate, User as UserSchema
 from schemas.Role import Role as RoleSchema, RolName
 from config.security import get_password_hash
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
-    def get_by_email(self, db: Session, *, email: str) -> Optional[User]:
-        return db.query(User).filter(User.email == email).first()
+    def get_by_email(self, db: Session, *, email: str) -> Optional[UserSchema]:
+        return db.query(User).options(User.roles).filter(User.email == email).first()
 
-    def create(self, db: Session, *, user: UserCreate) -> User:
+    def create(self, db: Session, *, user: UserCreate) -> UserSchema:
         created_user = User(
             username=user.username,
             email=user.email,

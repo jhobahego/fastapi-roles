@@ -23,6 +23,6 @@ class RoleCreate(BaseModel):
 
 class Role(RoleCreate):
     id: int
-    permissions: List[Autority]
+    permissions: List[str]
 
     model_config = ConfigDict(from_attributes=True)

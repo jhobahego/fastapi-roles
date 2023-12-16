@@ -5,19 +5,19 @@ from sqlalchemy.orm import Session, joinedload
 from config.deps import get_db
 
 from crud.crud_user import user as crud_user
-from schemas.User import UserCreate  # TODO: User as UserSchema
-# TODO: from schemas.Role import Role
+from schemas.User import UserCreate, User as UserSchema
+from schemas.Role import Role
 from models.User import User
 
 router = APIRouter()
 
 
-@router.get("/users", tags=["Users"])
+@router.get("/users", tags=["Users"], response_model=list[UserSchema])
 def get_users(db: Session = Depends(get_db), *, skip: int = 0, limit: int = 100):
     return db.query(User).options(joinedload(User.roles)).offset(skip).limit(limit).all()
 
 
-@router.post("/users", tags=["Users"])
+@router.post("/users", tags=["Users"], response_model=UserSchema)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     try:
         return crud_user.create(db, user=user)
@@ -35,7 +35,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
         raise HTTPException(status_code=500, detail="Error al crear el usuario")
 
 
-@router.get("/users/{id}", tags=["Users"])
+@router.get("/users/{id}", tags=["Users"], response_model=UserSchema)
 def get_user(id: int, db: Session = Depends(get_db)):
     user = db.query(User).options(joinedload(User.roles)).filter(User.id == id).first()
 
@@ -45,7 +45,7 @@ def get_user(id: int, db: Session = Depends(get_db)):
     return user
 
 
-@router.get("/users/{user_id}/roles", tags=["Users"])
+@router.get("/users/{user_id}/roles", tags=["Users"], response_model=list[Role])
 def get_user_roles(user_id: int, db: Session = Depends(get_db)):
     user = db.query(User).options(joinedload(User.roles)).filter(User.id == user_id).first()
     if user:
