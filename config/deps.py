@@ -69,7 +69,7 @@ def get_current_active_user(
 
     # Consultar el usuario rol y los permisos
     user = db.query(User).\
-        filter_by(user_id=current_user.id).\
+        filter_by(id=current_user.id).\
         options(joinedload(User.roles)).\
         first()
 
