@@ -22,6 +22,7 @@ class UserUpdate(BaseModel):
 
 class User(UserBase):
     id: int
+    is_active: bool
     roles: List[Role]
 
     model_config = ConfigDict(from_attributes=True)
