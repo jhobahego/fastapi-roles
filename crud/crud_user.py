@@ -7,12 +7,12 @@ from models.Role import Role
 from models.User import User
 from schemas.User import UserCreate, UserUpdate, User as UserSchema
 from schemas.Role import Role as RoleSchema, RolName
-from config.security import get_password_hash
+from config.security import get_password_hash, verify_password
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
-    def get_by_email(self, db: Session, *, email: str) -> Optional[UserSchema]:
-        return db.query(User).options(User.roles).filter(User.email == email).first()
+    def get_by_email(self, db: Session, *, email: str) -> Optional[User]:
+        return db.query(User).filter(User.email == email).first()
 
     def create(self, db: Session, *, user: UserCreate) -> UserSchema:
         created_user = User(
@@ -52,6 +52,17 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             del update_data["password"]
             update_data["hashed_password"] = hashed_password
         return super().update(db, db_obj=db_obj, obj_in=update_data)
+
+    def authenticate(self, db: Session, *, email: str, password: str) -> Optional[User]:
+        user = self.get_by_email(db, email=email)
+        if not user:
+            return None
+        if not verify_password(password, user.password):
+            return None
+        return user
+
+    def is_active(self, user: User) -> bool:
+        return user.is_active
 
     def is_superuser(self, user: User) -> bool:
         role: RoleSchema = user.roles[0]
