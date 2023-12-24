@@ -22,7 +22,7 @@ Este proyecto demuestra una API REST construida con FastAPI que muestra el manej
 1. Clona este repositorio:
 
     ```bash
-    git clone https://github.com/tu-usuario/tu-repo.git
+    git clone https://github.com/jhobahego/fastapi-roles.git
     ```
 
 2. Instala las dependencias:
@@ -31,10 +31,10 @@ Este proyecto demuestra una API REST construida con FastAPI que muestra el manej
     pip install -r requirements.txt
     ```
 
-3. Configura la URL de la base de datos en `app/main.py`:
+3. Configura la URL de la base de datos en un archivo `.env`:
 
-    ```python
-    SQLALCHEMY_DATABASE_URL = "tu-url-de-la-base-de-datos"
+    ```env
+    DB_URL="tu-url-de-la-base-de-datos"
     ```
 
 4. Ejecuta la aplicación FastAPI:
