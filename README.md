@@ -40,7 +40,7 @@ Este proyecto demuestra una API REST construida con FastAPI que muestra el manej
 4. Ejecuta la aplicación FastAPI:
 
     ```bash
-    uvicorn app.main:app --reload
+    uvicorn main:app --reload
     ```
 
 ## Uso
